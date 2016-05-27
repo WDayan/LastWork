@@ -1,0 +1,14 @@
+*.sublime-*
+*.out
+
+# Arquivos de compilação do LaTeX
+*.vrb
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.log
+*.nav
+*.ps
+*.snm
+*.toc
