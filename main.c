@@ -1,17 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
-#define MAX 40 
-
-typedef struct _contato{
-	char nome[40];
-	char fone[30];
-}TpContato;
+#include "ourLib.h"
 
 int main(){
 	
-	int fn;
+	int fn,size;
+	TpContato *tp = start();
 	system("clear");
 	do{
 		printf(
@@ -28,6 +20,10 @@ int main(){
 			case 1:
 				system("clear");
 				printf("Criar lista com quantos elementos?\n");
+				scanf(" %d", &size);
+				tp = createList(size);
+				fillList(tp, size);
+				printLista(tp, size);
 				
 				break;
 			case 2:
@@ -54,3 +50,49 @@ int main(){
 	}while(fn != 5);
 	return 0;
 }
+
+
+TpContato *createList(int size){
+
+	return (TpContato *) malloc(sizeof(TpContato) * size);
+
+}
+
+
+TpContato *start(){
+
+	return NULL;
+}
+
+
+void fillList(TpContato *tp, int size){
+	int i, num;
+
+	for(i=0; i < size; i++){
+
+		strcpy(tp[i].nome, "Fulano "); //Escrevendo "Fulano "
+		num = rand()%100;								//Numero para concatenar com Fulano	
+		sprintf(tp[i].nome, "%s%d", tp[i].nome, num);	//Peguei na net essa coisa.. funcionou hahaha ---> Fulano 'num'
+
+		num = rand()%500000;
+		sprintf(tp[i].fone, "%s%d", tp[i].fone, num); //Agora o telefone
+
+	}
+
+}
+
+
+void printLista(TpContato *tp, int size){
+	int i;
+	printf("\nLista:\n\n");
+
+	for(i=0; i < size; i++){
+
+		printf("-----------------\n");
+		printf("Nome: %s\nFone: %s\n", tp[i].nome, tp[i].fone);
+	}
+
+	printf("-----------------\n\n");
+}
+
+
