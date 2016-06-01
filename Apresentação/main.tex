@@ -123,7 +123,7 @@
 % - Use the \inst command only if there are several affiliations.
 % - Keep it simple, no one is interested in your street address.
 
-\date{Maio, 2016}
+\date{Junho, 2016}
 % - Either use conference name or its abbreviation.
 % - Not really informative to the audience, more for people (including
 %   yourself) who are reading the slides online
@@ -1235,29 +1235,32 @@
 	\begin{frame}
 		\frametitle{\secname}
 		\texttt{%
-		\scriptsize
-		comb\_sort(array a, int tam):\\
-		\qquad gap = tam \/ 1.3;\\
-		\qquad faca:\\
-		\qquad \qquad swap = false;\\
-		\qquad \qquad i = 0;\\
-		\qquad \qquad j = 1 + gap;\\
-		\qquad \qquad enquanto j < tam:\\
-		\qquad \qquad \qquad se a[i] > a[j]:\\
-		\qquad \qquad \qquad \qquad troca(a[i], a[j]);\\
-		\qquad \qquad \qquad \qquad swap = true;\\
-		\qquad \qquad \qquad i=i+1;\\
-		\qquad \qquad \qquad j=j+1;\\
-		\qquad \qquad gap = gap / 1.3;\\
-		\qquad \qquad se gap < 1:\\
-		\qquad \qquad \qquad gap = 1;\\
-		\qquad enquanto gap >= 1 e swap == true;\\
+			\scriptsize
+			function comb\_sort(array a, int tam):\\
+			\qquad gap = tam\\
+			\qquad swap = false\\
+			\qquad enquanto gap > 1 ou swap == true\\
+			\qquad \qquad gap = gap / 1.3\\
+			\qquad \qquad se gap < 1:\\
+			\qquad \qquad \qquad gap = 1\\
+			\qquad \qquad end se\\
+			\qquad \qquad swap = false\\
+			\qquad \qquad i = 0\\
+			\qquad \qquad j = gap\\
+			\qquad \qquad enquanto j < tam:\\
+			\qquad \qquad \qquad se a[i] > a[j]:\\
+			\qquad \qquad \qquad \qquad troca(a[i], a[j])\\
+			\qquad \qquad \qquad \qquad swap = true\\
+			\qquad \qquad \qquad end se\\
+			\qquad \qquad \qquad i=i+1;\\
+			\qquad \qquad \qquad j=j+1;\\
+			\qquad \qquad end enquanto\\
+			\qquad end enquanto\\
+			end function\\
 		}
-		
 	\end{frame}
 
 \section*{}
-
 
 \begin{frame}{Referências}
 	\bibliography{referencias}
