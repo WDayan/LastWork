@@ -14,8 +14,10 @@ typedef struct _contato{
 
 TpContato *start();
 
-TpContato *createList();
+TpContato *createVetor();
 
-void fillList(TpContato *tp, int size);
+void fillVetor(TpContato *tp);
 
-void printLista(TpContato *tp, int size);
+void printVetor(TpContato *tp);
+
+//void fillVetor(TpContato *tp, int size);

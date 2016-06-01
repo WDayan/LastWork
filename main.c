@@ -21,14 +21,15 @@ int main(){
 				system("clear");
 				printf("Criar lista com quantos elementos?\n");
 				scanf(" %d", &size);
-				tp = createList(size);
-				fillList(tp, size);
-				printLista(tp, size);
+
 				
 				break;
 			case 2:
 				system("clear");
 				printf("\t2) Cirar Vetor\n");
+				tp = createVetor();
+				fillVetor(tp);
+				printVetor(tp);
 				break;
 			case 3:
 				system("clear");
@@ -52,9 +53,9 @@ int main(){
 }
 
 
-TpContato *createList(int size){
+TpContato *createVetor(){
 
-	return (TpContato *) malloc(sizeof(TpContato) * size);
+	return (TpContato *) malloc(sizeof(TpContato) * MAX);
 
 }
 
@@ -65,10 +66,10 @@ TpContato *start(){
 }
 
 
-void fillList(TpContato *tp, int size){
+void fillVetor(TpContato *tp){
 	int i, num;
 
-	for(i=0; i < size; i++){
+	for(i=0; i < MAX; i++){
 
 		strcpy(tp[i].nome, "Fulano "); //Escrevendo "Fulano "
 		num = rand()%100;								//Numero para concatenar com Fulano	
@@ -82,11 +83,11 @@ void fillList(TpContato *tp, int size){
 }
 
 
-void printLista(TpContato *tp, int size){
+void printVetor(TpContato *tp){
 	int i;
-	printf("\nLista:\n\n");
+	printf("\nVetor:\n\n");
 
-	for(i=0; i < size; i++){
+	for(i=0; i < MAX; i++){
 
 		printf("-----------------\n");
 		printf("Nome: %s\nFone: %s\n", tp[i].nome, tp[i].fone);
