@@ -1,6 +1,9 @@
 *.sublime-*
 *.out
 
+# Arquivos gerados pelo Valgrind
+vgcore.*
+
 # Arquivos de compilação do LaTeX
 *.vrb
 *.aux
