@@ -4,6 +4,7 @@ int main(){
 	
 	int fn,size;
 	TpContato *tp = start();
+	ListaContato *lista = init();
 
 	clock_t cinicio, cfinal;
 	
@@ -24,6 +25,8 @@ int main(){
 				system("clear");
 				printf("Criar lista com quantos elementos?\n");
 				scanf(" %d", &size);
+				lista = createLista(size);
+				printLista(lista);
 				break;
 			case 2:
 				system("clear");
@@ -38,13 +41,23 @@ int main(){
 				system("clear");
 				printf("\t3) Ordenacao com Comb Sort\n");
 
-				cinicio = clock();
-				combSort_vetor(tp);
-				cfinal = clock();
+				if (!isEmpty_vetor(tp)){
+					cinicio = clock();
+					combSort_vetor(tp);
+					cfinal = clock();
+					printf("\n");
+					printVetor(tp);
+					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
+				}
+				if (!isEmpty_lista(lista)){
+					cinicio = clock();
+					combSort_lista(lista,size);
+					cfinal = clock();
+					printf("\n");
+					printLista(lista);
+					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
+				}
 
-				printf("\n");
-				printVetor(tp);
-				printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);  // maior precisão!
 				break;
 			case 4:
 				system("clear");
@@ -62,7 +75,10 @@ int main(){
 	}while(fn != 5);
 
 	if (tp != NULL) free(tp);
-
+	while (!isEmpty_lista(lista)){
+		lista = pop(lista, lista->contato);
+	}
+	
 	return 0;
 }
 
@@ -80,7 +96,8 @@ void fillVetor(TpContato *tp){
 
 	for(i=0; i < MAX; i++){
 
-		strcpy(tp[i].nome, "Fulano ");								// Escrevendo "Fulano "
+		strcpy(tp[i].nome, "Fulano ");								 // Escrevendo "Fulano "
+		strcpy(tp[i].fone, "");										// Inicializano fone
 	
 		for(j=0; j<3; j++) {										  // Numero para concatenar com Fulano
 			num[j] = rand()%9;										 // Aumentar a 'aleatoriedade' dos numeros, mantendo em 3 digitos
@@ -91,6 +108,14 @@ void fillVetor(TpContato *tp){
 			fone[j] = rand()%9; 									 // Aumentar a 'aleatoriedade' dos numeros, mantendo em 8 digitos
 			sprintf(tp[i].fone, "%s%d", tp[i].fone, fone[j]); 		// Agora o telefone
 		}
+	}
+}
+
+int isEmpty_vetor(TpContato *head){
+	if (head == NULL){
+		return 1;
+	}else {
+		return 0;
 	}
 }
 
@@ -117,20 +142,16 @@ void combSort_vetor(TpContato* tp){
 	while(gap > 1 || swap == TRUE){
 		gap = (int) gap / 1.3;
 		if (gap < 1) gap = 1;
-		printf("gap: %d\n", gap);
 		swap = FALSE;
 		
 		for(i=0, j=gap; j < MAX; i++, j++){
-			printf("i:j= %d:%d\n", i,j);
 			if (strcmp(tp[i].nome,tp[j].nome) > 0){
-				printf("troca= %s<->%s\n",tp[i].nome,tp[j].nome);
 				aux  = tp[i];
 				tp[i] = tp[j];
 				tp[j] = aux;
 				swap = TRUE;
 			}	
 		}
-		printf("swap: %d\n", swap);
 	}
 }
 
@@ -138,6 +159,32 @@ void combSort_vetor(TpContato* tp){
 
 ListaContato *init(){
 	return NULL;
+}
+
+ListaContato *createLista(int tam){
+	int i, j, num[3], fone_num[8];
+	char nome[40], fone[30];
+	ListaContato *lista = init();
+	
+	for(i=0; i < tam; i++){
+
+		strcpy(nome, "Fulano ");		 				 // Escrevendo "Fulano "
+		strcpy(fone, "");								// Inicializano fone
+	
+		for(j=0; j<3; j++) {							  // Numero para concatenar com Fulano
+			num[j] = rand()%9;							 // Aumentar a 'aleatoriedade' dos numeros, mantendo em 3 digitos
+			sprintf(nome, "%s%d", nome, num[j]);		// Peguei na net essa coisa.. funcionou hahaha ---> Fulano 'num'
+		}
+
+		for(j=0; j<8; j++){
+			fone_num[j] = rand()%9; 					 // Aumentar a 'aleatoriedade' dos numeros, mantendo em 8 digitos
+			sprintf(fone, "%s%d", fone, fone_num[j]); 	// Agora o telefone
+		}
+
+		lista = push(lista,nome,fone);
+	}
+
+	return lista;
 }
 
 ListaContato *push(ListaContato* head, char nome[], char fone[]){
@@ -206,7 +253,7 @@ ListaContato *pop(ListaContato* head, TpContato contato){
 	return head;
 }
 
-int isEmpty(ListaContato *head){
+int isEmpty_lista(ListaContato *head){
 	if (head == NULL){
 		return 1;
 	}else {
@@ -225,7 +272,7 @@ ListaContato *find(ListaContato* head, TpContato contato){
 	return NULL; //Elemento não está na lista
 }
 
-void print(ListaContato *h){
+void printLista(ListaContato *h){
 	ListaContato* p=init();
 	printf("\nLista:\n\n");
 
@@ -238,27 +285,33 @@ void print(ListaContato *h){
 
 void combSort_lista(ListaContato* head, int tam){
 	int gap = tam,
-		swap = FALSE;
+		swap = FALSE,
+		n;
 	
 	ListaContato *i = init(),
 				 *j = init();
 
+	TpContato aux;
+
 	while(gap > 1 || swap == TRUE){
 		gap = (int) gap / 1.3;
 		if (gap < 1) gap = 1;
-		printf("gap: %d\n", gap);
 		swap = FALSE;
 		
-		for(i=head, j=head+gap; j!=NULL; i=i->next, j=j->next){
-			if (strcmp(i->contato.nome,j->contato.nome) > 0){
-				printf("troca= %s<->%s\n",i->contato.nome,j->contato.nome);
-				// j->prev;
-				// aux  = tp[i];
-				// tp[i] = tp[j];
-				// tp[j] = aux;
-				swap = TRUE;
-			}	
+		i = head;
+		j = i;
+
+		for (n=0;n<gap;n++){
+			j=j->next;
 		}
-		printf("swap: %d\n", swap);
+
+		for(; j!=NULL; i=i->next, j=j->next){
+			if (strcmp(i->contato.nome,j->contato.nome) > 0){
+				aux  = i->contato;
+				i->contato = j->contato;
+				j->contato = aux;
+				swap = TRUE;
+			}
+		}
 	}
 }

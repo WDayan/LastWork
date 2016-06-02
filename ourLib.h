@@ -27,6 +27,8 @@ TpContato *createVetor();
 
 void fillVetor(TpContato *tp);
 
+int isEmpty_vetor(TpContato *head);
+
 void printVetor(TpContato *tp);
 
 void combSort_vetor(TpContato* tp);
@@ -36,14 +38,16 @@ void combSort_vetor(TpContato* tp);
 // Funções da Lista
 ListaContato *init();
 
+ListaContato *createLista(int tam);
+
 ListaContato *push(ListaContato* head, char nome[], char fone[]);
 
 ListaContato *pop(ListaContato* head, TpContato contato);
 
-int isEmpty(ListaContato *head);
+int isEmpty_lista(ListaContato *head);
 
 ListaContato *find(ListaContato* head, TpContato contato);
 
-void print(ListaContato *h);
+void printLista(ListaContato *h);
 
 void combSort_lista(ListaContato* head, int tam);
