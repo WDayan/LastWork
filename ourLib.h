@@ -15,6 +15,11 @@ typedef struct _contato{
 	char fone[30];
 }TpContato;
 
+typedef struct _listaContato{
+	TpContato contato;
+	struct _listaContato *prev;
+	struct _listaContato *next;
+}ListaContato;
 
 TpContato *start();
 
@@ -27,3 +32,18 @@ void printVetor(TpContato *tp);
 void combSort_vetor(TpContato* tp);
 
 //void fillVetor(TpContato *tp, int size);
+
+// Funções da Lista
+ListaContato *init();
+
+ListaContato *push(ListaContato* head, char nome[], char fone[]);
+
+ListaContato *pop(ListaContato* head, TpContato contato);
+
+int isEmpty(ListaContato *head);
+
+ListaContato *find(ListaContato* head, TpContato contato);
+
+void print(ListaContato *h);
+
+void combSort_lista(ListaContato* head, int tam);
