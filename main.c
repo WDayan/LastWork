@@ -5,6 +5,7 @@ int main(){
 	int fn,size;
 	TpContato *tp = start();
 	ListaContato *lista = init();
+	TpContato *aux = start();
 
 	clock_t cinicio, cfinal;
 	
@@ -62,6 +63,21 @@ int main(){
 			case 4:
 				system("clear");
 				printf("\t4) Ordenacao com Merge Sort\n");
+
+				if (!isEmpty_vetor(tp)){
+					cinicio = clock();
+					aux = createVetor();
+					MergeSort(tp, 0, MAX, aux);
+					cfinal = clock();
+					printf("\n");
+					printVetor(tp);
+					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);					
+				}
+
+				if (!isEmpty_lista(lista)){
+
+
+				}
 				break;
 			case 5:
 				system("clear");
@@ -315,3 +331,58 @@ void combSort_lista(ListaContato* head, int tam){
 		}
 	}
 }
+
+void MergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
+
+    int i = begin,j = mid + 1;
+    int m = mid,n = end;
+    int k = 0;
+
+    while(i <= m && j <= n){
+		if(strcmp(h[i].nome, h[j].nome) <= 0){
+			strcpy(temp[k].nome, h[i].nome);
+			strcpy(temp[k++].fone, h[i++].fone);
+        }else{
+			strcpy(temp[k].nome, h[j].nome);
+			strcpy(temp[k++].fone, h[j++].fone);	
+        }
+    }
+
+    while(i <= m){
+		strcpy(temp[k].nome, h[i].nome);
+		strcpy(temp[k++].fone, h[i++].fone);
+    }
+
+    while(j <= n){
+		strcpy(temp[k].nome, h[j].nome);
+		strcpy(temp[k++].fone, h[j++].fone);
+    }
+
+    for(i = 0;i < k;i++){
+
+		strcpy(h[begin + i].nome, temp[i].nome);
+		strcpy(h[begin + i].fone, temp[i].fone);
+    }
+
+}
+
+void MergeSort(TpContato *h,int begin,int end, TpContato *temp){
+    if(begin < end){
+
+        int mid = (begin + end) / 2;
+
+        MergeSort(h,begin,mid,temp);   
+        MergeSort(h,mid + 1,end,temp);   
+        MergeArray(h,begin,mid,end,temp); 
+    }
+}
+
+
+
+
+
+
+
+
+
+

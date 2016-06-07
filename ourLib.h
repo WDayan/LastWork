@@ -33,7 +33,11 @@ void printVetor(TpContato *tp);
 
 void combSort_vetor(TpContato* tp);
 
-//void fillVetor(TpContato *tp, int size);
+void MergeSort(TpContato *h,int begin,int end, TpContato *temp);
+
+void MergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp);
+
+
 
 // Funções da Lista
 ListaContato *init();
@@ -51,3 +55,8 @@ ListaContato *find(ListaContato* head, TpContato contato);
 void printLista(ListaContato *h);
 
 void combSort_lista(ListaContato* head, int tam);
+
+
+
+
+
