@@ -67,11 +67,13 @@ int main(){
 				if (!isEmpty_vetor(tp)){
 					cinicio = clock();
 					aux = createVetor();
-					MergeSort(tp, 0, MAX, aux);
+					MergeSort(tp, 0, MAX-1, aux);	// Vetor vai de 0-39
 					cfinal = clock();
 					printf("\n");
 					printVetor(tp);
-					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);					
+					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
+
+					if (!isEmpty_vetor(aux)) free(aux); 	// Liberando memória
 				}
 
 				if (!isEmpty_lista(lista)){
@@ -338,8 +340,9 @@ void MergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
     int m = mid,n = end;
     int k = 0;
 
+
     while(i <= m && j <= n){
-		if(strcmp(h[i].nome, h[j].nome) <= 0){
+    	if(strcmp(h[i].nome, h[j].nome) <= 0){
 			strcpy(temp[k].nome, h[i].nome);
 			strcpy(temp[k++].fone, h[i++].fone);
         }else{
