@@ -31,6 +31,8 @@ int isEmpty_vetor(TpContato *head);
 
 void printVetor(TpContato *tp);
 
+void vetcpy(TpContato *dest, TpContato *src);
+
 void combSort_vetor(TpContato* tp);
 
 void MergeSort(TpContato *h,int begin,int end, TpContato *temp);

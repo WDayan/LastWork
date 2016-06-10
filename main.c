@@ -5,7 +5,7 @@ int main(){
 	int fn,size;
 	TpContato *tp = start();
 	ListaContato *lista = init();
-	TpContato *aux = start();
+	TpContato *aux = start(), *copy = aux;
 
 	clock_t cinicio, cfinal;
 	
@@ -65,12 +65,14 @@ int main(){
 				printf("\t4) Ordenacao com Merge Sort\n");
 
 				if (!isEmpty_vetor(tp)){
-					cinicio = clock();
 					aux = createVetor();
-					MergeSort(tp, 0, MAX-1, aux);	// Vetor vai de 0-39
+					copy = createVetor();
+					vetcpy(copy, tp);
+					cinicio = clock();
+					MergeSort(copy, 0, MAX-1, aux);	// Vetor vai de 0-39
 					cfinal = clock();
 					printf("\n");
-					printVetor(tp);
+					printVetor(copy);
 					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
 
 					if (!isEmpty_vetor(aux)) free(aux); 	// Liberando memória
@@ -150,6 +152,18 @@ void printVetor(TpContato *tp){
 	printf("-----------------\n\n");
 }
 
+void vetcpy(TpContato *dest, TpContato *src){
+
+	int i=0;							//Copiando os valores de SRC para DEST
+	while(i < MAX){
+		strcpy(dest[i].nome, src[i].nome);			
+		strcpy(dest[i].fone, src[i].fone);
+		i++;
+	}
+}
+
+
+
 void combSort_vetor(TpContato* tp){
 	int gap = MAX,
 		swap = FALSE,
@@ -172,6 +186,63 @@ void combSort_vetor(TpContato* tp){
 		}
 	}
 }
+
+
+void MergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
+
+    int i = begin,j = mid + 1;
+    int m = mid,n = end;
+    int k = 0;	//contador do temporario
+
+
+    while(i <= m && j <= n){ 						//Entra para fazer a comparação 
+    	if(strcmp(h[i].nome, h[j].nome) <= 0){		//Se o 1° <= 2°
+			strcpy(temp[k].nome, h[i].nome);		//Copia o primeiro
+			strcpy(temp[k++].fone, h[i++].fone);
+        }
+		else{										//Senao
+			strcpy(temp[k].nome, h[j].nome);		//Copia o segundo
+			strcpy(temp[k++].fone, h[j++].fone);	//Passa o segundo pra frente.
+        }
+    }
+
+    while(i <= m){									//Caso nao tenha sido feito alterações antes do meio
+		strcpy(temp[k].nome, h[i].nome);			//Copiar eles do jeito que estao
+		strcpy(temp[k++].fone, h[i++].fone);
+    }
+
+    while(j <= n){									//Caso nao tenha sido feito alterações depois do meio
+		strcpy(temp[k].nome, h[j].nome);			//Copiar eles do jeito que estao
+		strcpy(temp[k++].fone, h[j++].fone);
+    }
+													
+    for(i = 0;i < k;i++){							//Salvando do temp no titular  
+		strcpy(h[begin + i].nome, temp[i].nome);
+		strcpy(h[begin + i].fone, temp[i].fone);
+    }
+
+}
+
+void MergeSort(TpContato *h,int begin,int end, TpContato *temp){
+    if(begin < end){
+
+        int mid = (begin + end) / 2;
+
+        MergeSort(h,begin,mid,temp);   
+        MergeSort(h,mid + 1,end,temp);   
+        MergeArray(h,begin,mid,end,temp); 
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 // Funções da Lista
 
@@ -334,51 +405,6 @@ void combSort_lista(ListaContato* head, int tam){
 	}
 }
 
-void MergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
-
-    int i = begin,j = mid + 1;
-    int m = mid,n = end;
-    int k = 0;
-
-
-    while(i <= m && j <= n){
-    	if(strcmp(h[i].nome, h[j].nome) <= 0){
-			strcpy(temp[k].nome, h[i].nome);
-			strcpy(temp[k++].fone, h[i++].fone);
-        }else{
-			strcpy(temp[k].nome, h[j].nome);
-			strcpy(temp[k++].fone, h[j++].fone);	
-        }
-    }
-
-    while(i <= m){
-		strcpy(temp[k].nome, h[i].nome);
-		strcpy(temp[k++].fone, h[i++].fone);
-    }
-
-    while(j <= n){
-		strcpy(temp[k].nome, h[j].nome);
-		strcpy(temp[k++].fone, h[j++].fone);
-    }
-
-    for(i = 0;i < k;i++){
-
-		strcpy(h[begin + i].nome, temp[i].nome);
-		strcpy(h[begin + i].fone, temp[i].fone);
-    }
-
-}
-
-void MergeSort(TpContato *h,int begin,int end, TpContato *temp){
-    if(begin < end){
-
-        int mid = (begin + end) / 2;
-
-        MergeSort(h,begin,mid,temp);   
-        MergeSort(h,mid + 1,end,temp);   
-        MergeArray(h,begin,mid,end,temp); 
-    }
-}
 
 
 
