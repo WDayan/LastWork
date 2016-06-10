@@ -4,7 +4,7 @@ int main(){
 	
 	int fn,size;
 	TpContato *tp = start();
-	ListaContato *lista = init();
+	ListaContato *lista = init(), *lista_copy=init(), *lista_aux=init();
 	TpContato *aux = start(), *copy = aux;
 
 	clock_t cinicio, cfinal;
@@ -68,9 +68,11 @@ int main(){
 					aux = createVetor();
 					copy = createVetor();
 					vetcpy(copy, tp);
+
 					cinicio = clock();
-					MergeSort(copy, 0, MAX-1, aux);	// Vetor vai de 0-39
+					mergeSort(copy, 0, MAX-1, aux);	// Vetor vai de 0-39
 					cfinal = clock();
+
 					printf("\n");
 					printVetor(copy);
 					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
@@ -79,7 +81,13 @@ int main(){
 				}
 
 				if (!isEmpty_lista(lista)){
-
+					lista_copy = listacpy(lista);
+					cinicio = clock();
+					mergeSortList(lista_copy, 0, size-1, lista_aux);	
+					cfinal = clock();
+					printf("\n");
+					printLista(lista_copy);
+					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
 
 				}
 				break;
@@ -187,8 +195,84 @@ void combSort_vetor(TpContato* tp){
 	}
 }
 
+ListaContato *backToStart(ListaContato *head){
 
-void MergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
+	while(head->prev != NULL)
+		head = head->prev;
+
+	return head;
+}
+
+
+ListaContato *runTo(ListaContato *head, int find){
+	int i=0;
+
+	while(i < find){
+		head = head->next;
+		i++;
+	}
+
+	return head;
+}
+
+void mergeList(ListaContato *head, int begin, int mid, int end, ListaContato *aux){
+
+	int i=begin, j=mid+1, m=mid, n=end, k=0;
+	ListaContato *li = init(),
+				 *lj = init();
+		
+
+
+	while(i <= m && j <= n){
+		li = runTo(head,i);
+		lj = runTo(head,j);
+
+		if(strcmp(li->contato.nome, lj->contato.nome)  <= 0 ){
+			strcpy(aux->contato.nome, li->contato.nome);
+			strcpy(aux->contato.fone, li->contato.fone);
+			i++;
+			k++;
+		}
+		else{
+			strcpy(aux->contato.nome, lj->contato.nome);
+			strcpy(aux->contato.fone, lj->contato.fone);
+			j++;
+			k++;
+
+		}
+	}
+	//Tenho que avançar o AUX (but how??)
+	while(i <= m){
+		li = runTo(head, i);
+		strcpy(aux->contato.nome, li->contato.nome);
+		strcpy(aux->contato.fone, li->contato.fone);
+		i++;
+		k++;
+	}
+
+	while(j <= n){
+		lj = runTo(head, j);
+		strcpy(aux->contato.nome, lj->contato.nome);
+		strcpy(aux->contato.fone, lj->contato.fone);
+		j++;
+		k++;
+	}
+
+	head = runTo(head, begin);
+	aux = backToStart(aux);
+	for(i = 0; i < k; i++){
+
+		strcpy(head->contato.nome, aux->contato.nome);
+		strcpy(head->contato.fone, aux->contato.fone);
+		aux = aux->next;
+		head = head->next;
+	}
+
+
+}
+
+
+void mergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
 
     int i = begin,j = mid + 1;
     int m = mid,n = end;
@@ -223,17 +307,30 @@ void MergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
 
 }
 
-void MergeSort(TpContato *h,int begin,int end, TpContato *temp){
+void mergeSort(TpContato *h,int begin,int end, TpContato *temp){
     if(begin < end){
 
         int mid = (begin + end) / 2;
 
-        MergeSort(h,begin,mid,temp);   
-        MergeSort(h,mid + 1,end,temp);   
-        MergeArray(h,begin,mid,end,temp); 
+        mergeSort(h,begin,mid,temp);   
+        mergeSort(h,mid + 1,end,temp);   
+        mergeArray(h,begin,mid,end,temp); 
     }
 }
 
+
+void mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux){
+	if(begin < end){
+		int mid = (begin + end) / 2;
+		
+		mergeSortList(head,begin,mid,aux);
+		mergeSortList(head,mid + 1,end,aux);
+		mergeList(head,begin,mid,end,aux);
+
+	}
+
+
+}
 
 
 
@@ -406,7 +503,20 @@ void combSort_lista(ListaContato* head, int tam){
 }
 
 
+ListaContato *listacpy(ListaContato *src){
+	ListaContato *dest = init();
+	char nome[40],fone[30];
 
+	while(src != NULL){
+		strcpy(nome, src->contato.nome);
+		strcpy(fone, src->contato.fone);
+		dest = push(dest, nome, fone);
+		src = src->next;
+
+	}
+
+	return dest;
+}
 
 
 

@@ -35,9 +35,9 @@ void vetcpy(TpContato *dest, TpContato *src);
 
 void combSort_vetor(TpContato* tp);
 
-void MergeSort(TpContato *h,int begin,int end, TpContato *temp);
+void mergeSort(TpContato *h,int begin,int end, TpContato *temp);
 
-void MergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp);
+void mergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp);
 
 
 
@@ -57,6 +57,16 @@ ListaContato *find(ListaContato* head, TpContato contato);
 void printLista(ListaContato *h);
 
 void combSort_lista(ListaContato* head, int tam);
+
+ListaContato *listacpy(ListaContato *src);
+
+void mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux);
+
+void mergeList(ListaContato *head, int begin, int mid, int end, ListaContato *aux);
+
+ListaContato *backToStart(ListaContato *head);
+
+ListaContato *runTo(ListaContato *head, int find);
 
 
 
