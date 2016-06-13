@@ -70,6 +70,8 @@ ListaContato *runTo(ListaContato *head, int find);
 
 ListaContato *anotherPush(char nome[], char fone[]);
 
+ListaContato *ourFree(ListaContato *lista_copy);
+
 
 
 

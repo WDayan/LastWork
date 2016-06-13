@@ -82,12 +82,16 @@ int main(){
 
 				if (!isEmpty_lista(lista)){
 					lista_copy = listacpy(lista);
+
 					cinicio = clock();
-					mergeSortList(lista_copy, 0, size-1, lista_aux);	
+					lista_aux = mergeSortList(lista_copy, 0, size-1, lista_aux);	
 					cfinal = clock();
+
 					printf("\n");
 					printLista(lista_copy);
 					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
+					lista_copy = ourFree(lista_copy);
+					lista_aux = ourFree(lista_aux);
 
 				}
 				break;
@@ -109,6 +113,7 @@ int main(){
 	
 	return 0;
 }
+
 
 
 TpContato *createVetor(){
@@ -195,169 +200,7 @@ void combSort_vetor(TpContato* tp){
 	}
 }
 
-ListaContato *backToStart(ListaContato *head){
 
-	while(head->prev != NULL)
-		head = head->prev;
-
-	return head;
-}
-
-
-ListaContato *runTo(ListaContato *head, int find){
-	int i=0;
-
-	while(i < find){
-		head = head->next;
-		i++;
-	}
-
-	return head;
-}
-
-ListaContato *mergeList(ListaContato *head, int begin, int mid, int end, ListaContato *aux){
-
-	int i=begin, j=mid+1, m=mid, n=end, k=0;
-	ListaContato *li = init(),
-				 *lj = init(),
-				 *h = aux;
-	
-
-		
-				 
-	char nome[40],fone[30];
-
-	//printf("\nNovo");
-	//printLista(h);
-
-/*
-	Nao é toda vez que ele dá o PUSH.
-	Ele começa com o k=0 SEMPRE! Aí apenas devo dar push quando non existir o valor! Poha! Debuguei!
-*/
-
-	while(i <= m && j <= n){
-		li = runTo(head,i);
-		lj = runTo(head,j);
-
-
-		if(strcmp(li->contato.nome, lj->contato.nome)  <= 0 ){
-			strcpy(nome, li->contato.nome);
-			strcpy(fone, li->contato.fone);
-			if(aux == NULL){
-				aux = push(aux, nome, fone);
-				h = aux;
-			}
-			else{
-				h = runTo(aux, k);
-				if(h == NULL){
-					h = runTo(aux, k-1);
-					h->next = anotherPush(nome, fone);
-					h->next->prev = h;
-					h = h->next;
-				}
-				else{
-					strcpy(h->contato.nome, nome);
-					strcpy(h->contato.fone, fone);
-				}
-			}
-			i++;
-			k++;
-		}
-		else{
-			strcpy(nome, lj->contato.nome);
-			strcpy(fone, lj->contato.fone);
-			if(aux == NULL){
-				aux = push(aux, nome, fone);
-				h = aux;
-			}
-			else{
-				h = runTo(aux, k);
-				if(h == NULL){
-					h = runTo(aux, k-1);
-					h->next = anotherPush(nome, fone);
-					h->next->prev = h;
-					h = h->next;
-				}
-				else{
-					strcpy(h->contato.nome, nome);
-					strcpy(h->contato.fone, fone);
-				}
-			}			
-			j++;
-			k++;
-		}
-
-	}
-
-	li = runTo(head, i);
-	while(i <= m){
-		strcpy(nome, li->contato.nome);
-		strcpy(fone, li->contato.fone);
-		if(aux == NULL){
-			aux = push(aux, nome, fone);
-			h = aux;
-		}
-		else{
-			h = runTo(aux, k);
-			if(h == NULL){
-				h = runTo(aux, k-1);
-				h->next = anotherPush(nome, fone);
-				h->next->prev = h;
-				h = h->next;
-			}
-			else{
-				strcpy(h->contato.nome, nome);
-				strcpy(h->contato.fone, fone);
-			}
-		}
-		i++;
-		k++;
-		li = li->next;
-	}
-
-	lj = runTo(head, j);
-	while(j <= n){
-		strcpy(nome, lj->contato.nome);
-		strcpy(fone, lj->contato.fone);
-		if(aux == NULL){
-			aux = push(aux, nome, fone);
-			h = aux;
-		}
-		else{
-			h = runTo(aux, k);
-			if(h == NULL){
-				h = runTo(aux, k-1);
-				h->next = anotherPush(nome, fone);
-				h->next->prev = h;
-				h = h->next;
-			}
-			else{
-				strcpy(h->contato.nome, nome);
-				strcpy(h->contato.fone, fone);
-			}
-		}
-		j++;
-		k++;
-		lj = lj->next;
-	}
-
-	//h = backToStart(h);
-	//head = runTo(head, begin);
-	//aux = backToStart(aux);
-
-	for(i = 0; i < k; i++){
-
-		strcpy(head->contato.nome, aux->contato.nome);
-		strcpy(head->contato.fone, aux->contato.fone);
-
-		if(aux->next != NULL)
-			aux = aux->next;
-		head = head->next;
-	}
-
-	
-	return backToStart(aux);
-}
 
 
 
@@ -366,7 +209,6 @@ void mergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
     int i = begin,j = mid + 1;
     int m = mid,n = end;
     int k = 0;	//contador do temporario
-
 
     while(i <= m && j <= n){ 						//Entra para fazer a comparação 
     	if(strcmp(h[i].nome, h[j].nome) <= 0){		//Se o 1° <= 2°
@@ -392,7 +234,6 @@ void mergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
     for(i = 0;i < k;i++){							//Salvando do temp no titular  
 		strcpy(h[begin + i].nome, temp[i].nome);
 		strcpy(h[begin + i].fone, temp[i].fone);
-		printf("%s\n%s\n",h[begin + i].nome, h[begin + i].fone); 
     }
 
 }
@@ -407,28 +248,6 @@ void mergeSort(TpContato *h,int begin,int end, TpContato *temp){
         mergeArray(h,begin,mid,end,temp); 
     }
 }
-
-
-ListaContato *mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux){
-	
-	if(begin < end){
-		int mid = (begin + end) / 2;
-		
-		aux = mergeSortList(head,begin,mid,aux);
-		aux = mergeSortList(head,mid + 1,end,aux);
-		aux = mergeList(head,begin,mid,end,aux);
-
-	}
-
-	return aux;
-}
-
-
-
-
-
-
-
 
 
 
@@ -621,7 +440,184 @@ ListaContato *listacpy(ListaContato *src){
 	return dest;
 }
 
+ListaContato *backToStart(ListaContato *head){
 
+	while(head->prev != NULL)
+		head = head->prev;
+
+	return head;
+}
+
+
+ListaContato *runTo(ListaContato *head, int find){
+	int i=0;
+
+	while(i < find){
+		head = head->next;
+		i++;
+	}
+
+	return head;
+}
+
+ListaContato *mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux){
+	
+	if(begin < end){
+		int mid = (begin + end) / 2;
+		
+		aux = mergeSortList(head,begin,mid,aux);
+		aux = mergeSortList(head,mid + 1,end,aux);
+		aux = mergeList(head,begin,mid,end,aux);
+
+	}
+
+	return aux;
+}
+
+
+ListaContato *mergeList(ListaContato *head, int begin, int mid, int end, ListaContato *aux){
+
+	int i=begin, j=mid+1, m=mid, n=end, k=0;
+	ListaContato *li = init(),
+				 *lj = init(),
+				 *h = aux;				 
+	char nome[40],fone[30];
+
+	while(i <= m && j <= n){
+		li = runTo(head,i);
+		lj = runTo(head,j);
+
+		if(strcmp(li->contato.nome, lj->contato.nome)  <= 0 ){
+			strcpy(nome, li->contato.nome);
+			strcpy(fone, li->contato.fone);
+			if(aux == NULL){
+				aux = push(aux, nome, fone);
+				h = aux;
+			}
+			else{
+				h = runTo(aux, k);
+				if(h == NULL){
+					h = runTo(aux, k-1);
+					h->next = anotherPush(nome, fone);
+					h->next->prev = h;
+					h = h->next;
+				}
+				else{
+					strcpy(h->contato.nome, nome);
+					strcpy(h->contato.fone, fone);
+				}
+			}
+			i++;
+			k++;
+		}
+		else{
+			strcpy(nome, lj->contato.nome);
+			strcpy(fone, lj->contato.fone);
+			if(aux == NULL){
+				aux = push(aux, nome, fone);
+				h = aux;
+			}
+			else{
+				h = runTo(aux, k);
+				if(h == NULL){
+					h = runTo(aux, k-1);
+					h->next = anotherPush(nome, fone);
+					h->next->prev = h;
+					h = h->next;
+				}
+				else{
+					strcpy(h->contato.nome, nome);
+					strcpy(h->contato.fone, fone);
+				}
+			}			
+			j++;
+			k++;
+		}
+
+	}
+
+	li = runTo(head, i);
+	while(i <= m){
+		strcpy(nome, li->contato.nome);
+		strcpy(fone, li->contato.fone);
+		if(aux == NULL){
+			aux = push(aux, nome, fone);
+			h = aux;
+		}
+		else{
+			h = runTo(aux, k);
+			if(h == NULL){
+				h = runTo(aux, k-1);
+				h->next = anotherPush(nome, fone);
+				h->next->prev = h;
+				h = h->next;
+			}
+			else{
+				strcpy(h->contato.nome, nome);
+				strcpy(h->contato.fone, fone);
+			}
+		}
+		i++;
+		k++;
+		li = li->next;
+	}
+
+	lj = runTo(head, j);
+	while(j <= n){
+		strcpy(nome, lj->contato.nome);
+		strcpy(fone, lj->contato.fone);
+		if(aux == NULL){
+			aux = push(aux, nome, fone);
+			h = aux;
+		}
+		else{
+			h = runTo(aux, k);
+			if(h == NULL){
+				h = runTo(aux, k-1);
+				h->next = anotherPush(nome, fone);
+				h->next->prev = h;
+				h = h->next;
+			}
+			else{
+				strcpy(h->contato.nome, nome);
+				strcpy(h->contato.fone, fone);
+			}
+		}
+		j++;
+		k++;
+		lj = lj->next;
+	}
+
+	head = runTo(head, begin);
+
+	for(i = 0; i < k; i++){
+
+		strcpy(head->contato.nome, aux->contato.nome);
+		strcpy(head->contato.fone, aux->contato.fone);
+
+		if(aux->next != NULL)
+			aux = aux->next;
+		head = head->next;
+	}
+
+	return backToStart(aux);
+}
+
+
+
+
+ListaContato *ourFree(ListaContato *lista){
+
+	ListaContato *aux;	
+
+	while(lista != NULL){
+		aux = lista->next;
+		free(lista);
+		lista = aux;
+	}
+	
+	return NULL;
+}
 
 
 
