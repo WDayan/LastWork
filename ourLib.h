@@ -60,14 +60,15 @@ void combSort_lista(ListaContato* head, int tam);
 
 ListaContato *listacpy(ListaContato *src);
 
-void mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux);
+ListaContato *mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux);
 
-void mergeList(ListaContato *head, int begin, int mid, int end, ListaContato *aux);
+ListaContato *mergeList(ListaContato *head, int begin, int mid, int end, ListaContato *aux);
 
 ListaContato *backToStart(ListaContato *head);
 
 ListaContato *runTo(ListaContato *head, int find);
 
+ListaContato *anotherPush(char nome[], char fone[]);
 
 
 

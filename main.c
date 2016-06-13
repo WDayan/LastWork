@@ -215,61 +215,150 @@ ListaContato *runTo(ListaContato *head, int find){
 	return head;
 }
 
-void mergeList(ListaContato *head, int begin, int mid, int end, ListaContato *aux){
+ListaContato *mergeList(ListaContato *head, int begin, int mid, int end, ListaContato *aux){
 
 	int i=begin, j=mid+1, m=mid, n=end, k=0;
 	ListaContato *li = init(),
-				 *lj = init();
-		
+				 *lj = init(),
+				 *h = aux;
+	
 
+		
+				 
+	char nome[40],fone[30];
+
+	//printf("\nNovo");
+	//printLista(h);
+
+/*
+	Nao é toda vez que ele dá o PUSH.
+	Ele começa com o k=0 SEMPRE! Aí apenas devo dar push quando non existir o valor! Poha! Debuguei!
+*/
 
 	while(i <= m && j <= n){
 		li = runTo(head,i);
 		lj = runTo(head,j);
 
+
 		if(strcmp(li->contato.nome, lj->contato.nome)  <= 0 ){
-			strcpy(aux->contato.nome, li->contato.nome);
-			strcpy(aux->contato.fone, li->contato.fone);
+			strcpy(nome, li->contato.nome);
+			strcpy(fone, li->contato.fone);
+			if(aux == NULL){
+				aux = push(aux, nome, fone);
+				h = aux;
+			}
+			else{
+				h = runTo(aux, k);
+				if(h == NULL){
+					h = runTo(aux, k-1);
+					h->next = anotherPush(nome, fone);
+					h->next->prev = h;
+					h = h->next;
+				}
+				else{
+					strcpy(h->contato.nome, nome);
+					strcpy(h->contato.fone, fone);
+				}
+			}
 			i++;
 			k++;
 		}
 		else{
-			strcpy(aux->contato.nome, lj->contato.nome);
-			strcpy(aux->contato.fone, lj->contato.fone);
+			strcpy(nome, lj->contato.nome);
+			strcpy(fone, lj->contato.fone);
+			if(aux == NULL){
+				aux = push(aux, nome, fone);
+				h = aux;
+			}
+			else{
+				h = runTo(aux, k);
+				if(h == NULL){
+					h = runTo(aux, k-1);
+					h->next = anotherPush(nome, fone);
+					h->next->prev = h;
+					h = h->next;
+				}
+				else{
+					strcpy(h->contato.nome, nome);
+					strcpy(h->contato.fone, fone);
+				}
+			}			
 			j++;
 			k++;
-
 		}
+
 	}
-	//Tenho que avançar o AUX (but how??)
+
+	li = runTo(head, i);
 	while(i <= m){
-		li = runTo(head, i);
-		strcpy(aux->contato.nome, li->contato.nome);
-		strcpy(aux->contato.fone, li->contato.fone);
+		strcpy(nome, li->contato.nome);
+		strcpy(fone, li->contato.fone);
+		if(aux == NULL){
+			aux = push(aux, nome, fone);
+			h = aux;
+		}
+		else{
+			h = runTo(aux, k);
+			if(h == NULL){
+				h = runTo(aux, k-1);
+				h->next = anotherPush(nome, fone);
+				h->next->prev = h;
+				h = h->next;
+			}
+			else{
+				strcpy(h->contato.nome, nome);
+				strcpy(h->contato.fone, fone);
+			}
+		}
 		i++;
 		k++;
+		li = li->next;
 	}
 
+	lj = runTo(head, j);
 	while(j <= n){
-		lj = runTo(head, j);
-		strcpy(aux->contato.nome, lj->contato.nome);
-		strcpy(aux->contato.fone, lj->contato.fone);
+		strcpy(nome, lj->contato.nome);
+		strcpy(fone, lj->contato.fone);
+		if(aux == NULL){
+			aux = push(aux, nome, fone);
+			h = aux;
+		}
+		else{
+			h = runTo(aux, k);
+			if(h == NULL){
+				h = runTo(aux, k-1);
+				h->next = anotherPush(nome, fone);
+				h->next->prev = h;
+				h = h->next;
+			}
+			else{
+				strcpy(h->contato.nome, nome);
+				strcpy(h->contato.fone, fone);
+			}
+		}
 		j++;
 		k++;
+		lj = lj->next;
 	}
 
-	head = runTo(head, begin);
-	aux = backToStart(aux);
+	//h = backToStart(h);
+	//head = runTo(head, begin);
+	//aux = backToStart(aux);
+
 	for(i = 0; i < k; i++){
 
 		strcpy(head->contato.nome, aux->contato.nome);
 		strcpy(head->contato.fone, aux->contato.fone);
-		aux = aux->next;
+
+		if(aux->next != NULL)
+			aux = aux->next;
 		head = head->next;
 	}
 
-
+	
+	return backToStart(aux);
 }
+
 
 
 void mergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
@@ -303,6 +392,7 @@ void mergeArray(TpContato *h,int begin,int mid,int end, TpContato *temp){
     for(i = 0;i < k;i++){							//Salvando do temp no titular  
 		strcpy(h[begin + i].nome, temp[i].nome);
 		strcpy(h[begin + i].fone, temp[i].fone);
+		printf("%s\n%s\n",h[begin + i].nome, h[begin + i].fone); 
     }
 
 }
@@ -319,17 +409,18 @@ void mergeSort(TpContato *h,int begin,int end, TpContato *temp){
 }
 
 
-void mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux){
+ListaContato *mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux){
+	
 	if(begin < end){
 		int mid = (begin + end) / 2;
 		
-		mergeSortList(head,begin,mid,aux);
-		mergeSortList(head,mid + 1,end,aux);
-		mergeList(head,begin,mid,end,aux);
+		aux = mergeSortList(head,begin,mid,aux);
+		aux = mergeSortList(head,mid + 1,end,aux);
+		aux = mergeList(head,begin,mid,end,aux);
 
 	}
 
-
+	return aux;
 }
 
 
@@ -371,6 +462,18 @@ ListaContato *createLista(int tam){
 	}
 
 	return lista;
+}
+
+ListaContato *anotherPush(char nome[], char fone[]){
+
+	ListaContato *novo = (ListaContato *) malloc(sizeof(ListaContato));
+	strcpy(novo->contato.nome,nome);
+	strcpy(novo->contato.fone,fone);
+	
+	novo->prev = NULL;
+	novo->next = NULL;
+
+	return novo;
 }
 
 ListaContato *push(ListaContato* head, char nome[], char fone[]){
