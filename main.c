@@ -43,20 +43,29 @@ int main(){
 				printf("\t3) Ordenacao com Comb Sort\n");
 
 				if (!isEmpty_vetor(tp)){
+					copy = createVetor();
+					vetcpy(copy, tp);
+
 					cinicio = clock();
-					combSort_vetor(tp);
+					combSort_vetor(copy);
 					cfinal = clock();
 					printf("\n");
-					printVetor(tp);
+					printVetor(copy);
 					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
+
+					if(!isEmpty_vetor(copy)) free(copy);
 				}
 				if (!isEmpty_lista(lista)){
+					lista_copy = listacpy(lista);
+
 					cinicio = clock();
-					combSort_lista(lista,size);
+					combSort_lista(lista_copy,size);
 					cfinal = clock();
 					printf("\n");
-					printLista(lista);
+					printLista(lista_copy);
 					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
+
+					lista_copy = ourFree(lista_copy);
 				}
 
 				break;
@@ -78,6 +87,7 @@ int main(){
 					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
 
 					if (!isEmpty_vetor(aux)) free(aux); 	// Liberando memória
+					if (!isEmpty_vetor(copy)) free(copy); 	// Liberando memória
 				}
 
 				if (!isEmpty_lista(lista)){
@@ -90,6 +100,7 @@ int main(){
 					printf("\n");
 					printLista(lista_copy);
 					printf("Tempo: %f segundos.\n", (float)(cfinal-cinicio)/CLOCKS_PER_SEC);
+					
 					lista_copy = ourFree(lista_copy);
 					lista_aux = ourFree(lista_aux);
 
@@ -106,10 +117,9 @@ int main(){
 		}
 	}while(fn != 5);
 
-	if (tp != NULL) free(tp);
-	while (!isEmpty_lista(lista)){
-		lista = pop(lista, lista->contato);
-	}
+	if (!isEmpty_vetor(tp)) free(tp);
+
+	lista = ourFree(lista);
 	
 	return 0;
 }
@@ -608,19 +618,17 @@ ListaContato *mergeList(ListaContato *head, int begin, int mid, int end, ListaCo
 
 ListaContato *ourFree(ListaContato *lista){
 
-	ListaContato *aux;	
+	// ListaContato *aux;	
 
-	while(lista != NULL){
-		aux = lista->next;
-		free(lista);
-		lista = aux;
+	// while(lista != NULL){
+	// 	aux = lista->next;
+	// 	free(lista);
+	// 	lista = aux;
+	// }
+
+	while (!isEmpty_lista(lista)){
+		lista = pop(lista, lista->contato);
 	}
-	
+
 	return NULL;
 }
-
-
-
-
-
-
