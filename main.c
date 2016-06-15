@@ -473,14 +473,13 @@ ListaContato *runTo(ListaContato *head, int find){
 ListaContato *mergeSortList(ListaContato *head, int begin, int end, ListaContato *aux){
 	
 	if(begin < end){
+
 		int mid = (begin + end) / 2;
 		
 		aux = mergeSortList(head,begin,mid,aux);
 		aux = mergeSortList(head,mid + 1,end,aux);
 		aux = mergeList(head,begin,mid,end,aux);
-
 	}
-
 	return aux;
 }
 
@@ -617,14 +616,6 @@ ListaContato *mergeList(ListaContato *head, int begin, int mid, int end, ListaCo
 
 
 ListaContato *ourFree(ListaContato *lista){
-
-	// ListaContato *aux;	
-
-	// while(lista != NULL){
-	// 	aux = lista->next;
-	// 	free(lista);
-	// 	lista = aux;
-	// }
 
 	while (!isEmpty_lista(lista)){
 		lista = pop(lista, lista->contato);
